@@ -1,0 +1,3507 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="FSX is a calm, quick music player for the songs you already love.">
+    <title>FSX — music, without the fuss</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;1,600&display=swap"
+        rel="stylesheet"
+    >
+
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"
+        defer
+    ></script>
+
+    <style>
+        :root {
+            --paper: #f7f3e8;
+            --paper-deep: #eee8d7;
+            --ink: #25221e;
+            --muted: #756e62;
+            --line: rgba(37, 34, 30, .14);
+            --pink: #ee9d9e;
+            --pink-deep: #d36f78;
+            --yellow: #f8d875;
+            --green: #a6c4a0;
+            --white: #fffdf7;
+            --shadow: 0 24px 60px rgba(75, 60, 36, .13);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            margin: 0;
+            color: var(--ink);
+            background: var(--paper);
+            font-family: Manrope, sans-serif;
+            overflow-x: hidden;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        button {
+            color: inherit;
+            font: inherit;
+            cursor: pointer;
+        }
+
+        .grain {
+            position: fixed;
+            inset: 0;
+            z-index: 10;
+            pointer-events: none;
+            opacity: .045;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.95' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E");
+        }
+
+        .wrap {
+            width: min(1160px, calc(100% - 48px));
+            margin: auto;
+        }
+
+        .nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 88px;
+            position: relative;
+            z-index: 20;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 18px;
+            font-weight: 800;
+            letter-spacing: -.06em;
+        }
+
+        .brand-mark {
+            width: 34px;
+            height: 34px;
+            display: grid;
+            place-items: center;
+            border-radius: 50% 45% 48% 52%;
+            background: var(--ink);
+            color: var(--yellow);
+            transform: rotate(-10deg);
+            font-family: 'Playfair Display', serif;
+            font-size: 20px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        .nav-links a {
+            transition: color .2s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--pink-deep);
+        }
+
+        .nav-cta,
+        .button {
+            border: 0;
+            border-radius: 999px;
+            padding: 12px 18px;
+            background: var(--ink);
+            color: var(--paper);
+            font-size: 12px;
+            font-weight: 800;
+            transition: transform .25s ease, background .25s ease;
+        }
+
+        .nav-cta:hover,
+        .button:hover {
+            transform: translateY(-3px);
+            background: var(--pink-deep);
+        }
+
+        .hero {
+            min-height: 680px;
+            display: grid;
+            grid-template-columns: 1fr .9fr;
+            gap: 54px;
+            align-items: center;
+            padding: 56px 0 105px;
+            position: relative;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            width: 420px;
+            height: 420px;
+            right: 8%;
+            top: 80px;
+            border-radius: 50%;
+            background: var(--yellow);
+            opacity: .45;
+            filter: blur(1px);
+            z-index: -1;
+        }
+
+        .eyebrow,
+        .kicker {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            color: var(--pink-deep);
+            font: 500 11px 'DM Mono', monospace;
+            text-transform: uppercase;
+            letter-spacing: .14em;
+        }
+
+        .eyebrow i {
+            display: block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--pink);
+        }
+
+        h1 {
+            max-width: 620px;
+            margin: 20px 0 22px;
+            font-size: clamp(56px, 7vw, 96px);
+            line-height: .94;
+            letter-spacing: -.085em;
+            font-weight: 800;
+        }
+
+        h1 em {
+            font-family: 'Playfair Display', serif;
+            font-weight: 600;
+            letter-spacing: -.06em;
+        }
+
+        .hero-copy {
+            max-width: 450px;
+            color: var(--muted);
+            font-size: 16px;
+            line-height: 1.8;
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 14px;
+            align-items: center;
+            margin-top: 32px;
+        }
+
+        .button.primary {
+            background: var(--pink-deep);
+            color: var(--white);
+            padding: 15px 22px;
+        }
+
+        .text-link {
+            color: var(--ink);
+            font-size: 12px;
+            font-weight: 800;
+            border-bottom: 1px solid var(--ink);
+            padding-bottom: 3px;
+        }
+
+        .hero-note {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 34px;
+            color: var(--muted);
+            font-size: 11px;
+        }
+
+        .avatar-stack {
+            display: flex;
+        }
+
+        .avatar {
+            width: 27px;
+            height: 27px;
+            margin-right: -8px;
+            border: 2px solid var(--paper);
+            border-radius: 50%;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .avatar:nth-child(1) {
+            background-image: url('https://github.com/YOCRRZ224.png?size=64');
+        }
+
+        .avatar:nth-child(2) {
+            background-image: url('https://github.com/abduhamidabdukomilov3-creator.png?size=64');
+        }
+
+        .mockup-wrap {
+            position: relative;
+            display: grid;
+            place-items: center;
+            min-height: 485px;
+        }
+
+        .tape {
+            position: absolute;
+            right: 5%;
+            top: 7%;
+            width: 210px;
+            height: 74px;
+            padding: 17px 20px;
+            background: var(--pink);
+            box-shadow: var(--shadow);
+            transform: rotate(9deg);
+            font: 11px 'DM Mono', monospace;
+            line-height: 1.5;
+        }
+
+        .tape::after {
+            content: '';
+            position: absolute;
+            right: 14px;
+            bottom: 9px;
+            width: 31px;
+            height: 31px;
+            border: 1px solid rgba(37,34,30,.45);
+            border-radius: 50%;
+            box-shadow:
+                inset 0 0 0 5px var(--pink),
+                inset 0 0 0 6px rgba(37,34,30,.45);
+        }
+
+        .player-card {
+            width: min(360px, 100%);
+            padding: 18px;
+            position: relative;
+            border: 1px solid rgba(37,34,30,.12);
+            border-radius: 20px;
+            background: rgba(255,253,247,.82);
+            box-shadow: var(--shadow);
+            transform: rotate(3deg);
+        }
+
+        .player-top {
+            display: flex;
+            justify-content: space-between;
+            color: var(--muted);
+            font: 10px 'DM Mono', monospace;
+        }
+
+        .dots {
+            display: flex;
+            gap: 4px;
+        }
+
+        .dots i {
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: var(--pink);
+        }
+
+        .album-art {
+            aspect-ratio: 1;
+            margin: 17px 0;
+            overflow: hidden;
+            position: relative;
+            border-radius: 13px;
+            background: linear-gradient(
+                135deg,
+                #b8d19e 0%,
+                #e4e4a9 45%,
+                #e99a9f 46%,
+                #f3c7ab 100%
+            );
+        }
+
+        .album-art::before {
+            content: 'ON\A & ON';
+            white-space: pre;
+            position: absolute;
+            left: 22px;
+            bottom: 16px;
+            color: var(--white);
+            font: 600 44px/.77 'Playfair Display', serif;
+            transform: rotate(-7deg);
+        }
+
+        .album-art::after {
+            content: '';
+            position: absolute;
+            width: 150px;
+            height: 150px;
+            right: -23px;
+            top: -28px;
+            border: 27px solid rgba(255,253,247,.35);
+            border-radius: 50%;
+        }
+
+        .track-title {
+            font-size: 18px;
+            font-weight: 800;
+            letter-spacing: -.04em;
+        }
+
+        .artist {
+            color: var(--muted);
+            margin-top: 3px;
+            font-size: 11px;
+        }
+
+        .wave {
+            display: flex;
+            align-items: center;
+            gap: 3px;
+            height: 34px;
+            margin: 17px 0 7px;
+        }
+
+        .wave span {
+            flex: 1;
+            min-width: 2px;
+            height: var(--h);
+            border-radius: 10px;
+            background: var(--pink);
+            opacity: .82;
+        }
+
+        .time {
+            display: flex;
+            justify-content: space-between;
+            color: var(--muted);
+            font: 9px 'DM Mono', monospace;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 24px;
+            margin-top: 13px;
+        }
+
+        .control {
+            border: 0;
+            padding: 0;
+            background: transparent;
+            font-size: 16px;
+        }
+
+        .control.play {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: var(--ink);
+            color: var(--yellow);
+            font-size: 15px;
+        }
+
+        .scribble {
+            position: absolute;
+            left: -23px;
+            bottom: 14%;
+            width: 120px;
+            color: var(--pink-deep);
+            font: italic 16px 'Playfair Display', serif;
+            transform: rotate(-11deg);
+        }
+
+        .scribble::after {
+            content: '↗';
+            font: 25px Manrope;
+            margin-left: 8px;
+        }
+
+        .ticker {
+            border-top: 1px solid var(--line);
+            border-bottom: 1px solid var(--line);
+            padding: 15px 0;
+            overflow: hidden;
+            white-space: nowrap;
+            color: var(--muted);
+            font: 10px 'DM Mono', monospace;
+            text-transform: uppercase;
+            letter-spacing: .16em;
+        }
+
+        .ticker-track {
+            display: inline-flex;
+            gap: 34px;
+            animation: drift 24s linear infinite;
+        }
+
+        .ticker b {
+            color: var(--pink-deep);
+            font-weight: 500;
+        }
+
+        @keyframes drift {
+            to {
+                transform: translateX(-50%);
+            }
+        }
+
+        section {
+            padding: 122px 0;
+        }
+
+        .section-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: end;
+            margin-bottom: 52px;
+        }
+
+        .section-head h2 {
+            max-width: 610px;
+            margin: 12px 0 0;
+            font-size: clamp(34px, 4vw, 56px);
+            line-height: 1;
+            letter-spacing: -.075em;
+        }
+
+        .section-head p {
+            max-width: 270px;
+            margin: 0;
+            color: var(--muted);
+            font-size: 13px;
+            line-height: 1.7;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            border-top: 1px solid var(--line);
+        }
+
+        .feature {
+            min-height: 285px;
+            padding: 27px 25px 25px 0;
+            border-bottom: 1px solid var(--line);
+        }
+
+        .feature + .feature {
+            border-left: 1px solid var(--line);
+            padding-left: 25px;
+        }
+
+        .feature-num {
+            display: block;
+            color: var(--pink-deep);
+            font: 11px 'DM Mono', monospace;
+        }
+
+        .feature h3 {
+            margin: 54px 0 12px;
+            font-size: 20px;
+            letter-spacing: -.05em;
+        }
+
+        .feature p {
+            max-width: 270px;
+            color: var(--muted);
+            font-size: 13px;
+            line-height: 1.7;
+        }
+
+        .feature-icon {
+            float: right;
+            display: grid;
+            place-items: center;
+            width: 43px;
+            height: 43px;
+            border-radius: 50%;
+            background: var(--yellow);
+            font-size: 18px;
+        }
+
+        .feature:hover .feature-icon {
+            animation: iconWiggle .55s ease both;
+        }
+
+        @keyframes iconWiggle {
+            0%, 100% {
+                transform: rotate(0);
+            }
+
+            45% {
+                transform: rotate(-12deg) scale(1.08);
+            }
+        }
+
+        .feature-lab {
+            padding: 128px 0;
+            background: var(--paper-deep);
+            overflow: hidden;
+        }
+
+        .detail-grid {
+            display: grid;
+            grid-template-columns: .75fr 1.25fr;
+            gap: 100px;
+            align-items: start;
+        }
+
+        .detail-intro {
+            position: sticky;
+            top: 100px;
+        }
+
+        .detail-intro h2 {
+            max-width: 430px;
+            margin: 13px 0 20px;
+            font-size: clamp(38px, 5vw, 67px);
+            line-height: .95;
+            letter-spacing: -.08em;
+        }
+
+        .detail-intro p {
+            max-width: 345px;
+            color: var(--muted);
+            font-size: 14px;
+            line-height: 1.8;
+        }
+
+        .detail-list {
+            display: grid;
+            gap: 16px;
+        }
+
+        .detail-card {
+            display: grid;
+            grid-template-columns: 55px 1fr auto;
+            gap: 20px;
+            align-items: start;
+            min-height: 174px;
+            padding: 25px;
+            border: 1px solid var(--line);
+            border-radius: 13px;
+            background: rgba(255,253,247,.58);
+            transition:
+                transform .3s ease,
+                background .3s ease,
+                box-shadow .3s ease;
+        }
+
+        .detail-card:hover {
+            transform: translateX(8px);
+            background: var(--white);
+            box-shadow: 0 18px 35px rgba(75,60,36,.09);
+        }
+
+        .detail-index {
+            display: grid;
+            place-items: center;
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: var(--yellow);
+            color: var(--ink);
+            font: 11px 'DM Mono', monospace;
+        }
+
+        .detail-card h3 {
+            margin: 2px 0 8px;
+            font-size: 18px;
+            letter-spacing: -.04em;
+        }
+
+        .detail-card p {
+            max-width: 370px;
+            margin: 0;
+            color: var(--muted);
+            font-size: 12px;
+            line-height: 1.7;
+        }
+
+        .detail-tag {
+            align-self: start;
+            padding: 7px 9px;
+            border: 1px solid var(--line);
+            border-radius: 99px;
+            color: var(--muted);
+            font: 9px 'DM Mono', monospace;
+            white-space: nowrap;
+        }
+
+        .mini-bars {
+            display: flex;
+            align-items: end;
+            gap: 3px;
+            height: 31px;
+            margin-top: 14px;
+        }
+
+        .mini-bars span {
+            width: 4px;
+            border-radius: 5px;
+            background: var(--pink);
+            animation: breathe 1.2s ease-in-out infinite alternate;
+        }
+
+        .mini-bars span:nth-child(2n) {
+            animation-delay: -.4s;
+        }
+
+        .mini-bars span:nth-child(3n) {
+            animation-delay: -.8s;
+        }
+
+        @keyframes breathe {
+            to {
+                height: 25px !important;
+                opacity: .55;
+            }
+        }
+
+        .parallax-note {
+            position: absolute;
+            right: 5%;
+            margin-top: -45px;
+            color: var(--pink-deep);
+            font: italic 16px 'Playfair Display', serif;
+            transform: rotate(5deg);
+        }
+
+        .showcase {
+            background: var(--ink);
+            color: var(--paper);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .showcase::before {
+            content: '';
+            position: absolute;
+            width: 430px;
+            height: 430px;
+            right: -120px;
+            top: -170px;
+            border: 1px solid rgba(248,216,117,.3);
+            border-radius: 50%;
+            box-shadow:
+                0 0 0 40px rgba(248,216,117,.05),
+                0 0 0 80px rgba(248,216,117,.04);
+        }
+
+        .showcase .kicker {
+            color: var(--yellow);
+        }
+
+        .showcase .section-head p {
+            color: rgba(247,243,232,.6);
+        }
+
+        .showcase .section-head {
+            position: relative;
+        }
+
+        .showcase-grid {
+            display: grid;
+            grid-template-columns: 1.1fr .9fr;
+            gap: 22px;
+            position: relative;
+        }
+
+        .shot {
+            overflow: hidden;
+            position: relative;
+            border-radius: 12px;
+            background: #454036;
+        }
+
+        .shot img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform .7s cubic-bezier(.2,.8,.2,1);
+        }
+
+        .shot:hover img {
+            transform: scale(1.045);
+        }
+
+        .shot.large {
+            height: 490px;
+        }
+
+        .shot.small {
+            height: 232px;
+        }
+
+        .shot + .shot {
+            margin-top: 26px;
+        }
+
+        .shot-label {
+            position: absolute;
+            left: 16px;
+            bottom: 14px;
+            padding: 7px 10px;
+            border-radius: 99px;
+            color: var(--ink);
+            background: var(--paper);
+            font: 10px 'DM Mono', monospace;
+        }
+
+        .download {
+            display: grid;
+            grid-template-columns: .9fr 1.1fr;
+            gap: 90px;
+            align-items: center;
+        }
+
+        .download h2 {
+            margin: 13px 0 20px;
+            max-width: 480px;
+            font-size: clamp(40px, 5vw, 68px);
+            line-height: .96;
+            letter-spacing: -.08em;
+        }
+
+        .download-copy {
+            color: var(--muted);
+            font-size: 14px;
+            line-height: 1.7;
+            max-width: 400px;
+        }
+
+        .download-card {
+            padding: 30px;
+            border: 1px solid var(--line);
+            border-radius: 15px;
+            background: rgba(255,253,247,.52);
+        }
+
+        .download-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 18px 0;
+            border-bottom: 1px solid var(--line);
+        }
+
+        .download-row:last-child {
+            border-bottom: 0;
+        }
+
+        .download-platform {
+            display: flex;
+            gap: 13px;
+            align-items: center;
+            font-size: 14px;
+            font-weight: 800;
+        }
+
+        .platform-icon {
+            display: grid;
+            place-items: center;
+            width: 33px;
+            height: 33px;
+            border-radius: 9px;
+            background: var(--yellow);
+            font-size: 15px;
+        }
+
+        .download-row small {
+            display: block;
+            margin-top: 3px;
+            color: var(--muted);
+            font: 10px 'DM Mono', monospace;
+            font-weight: 400;
+        }
+
+        .download-btn {
+            border: 1px solid var(--line);
+            border-radius: 99px;
+            background: transparent;
+            padding: 9px 14px;
+            font-size: 11px;
+            font-weight: 800;
+            transition: all .2s;
+        }
+
+        .download-btn:hover {
+            background: var(--pink);
+            border-color: var(--pink);
+            transform: translateY(-2px);
+        }
+
+        footer {
+            padding: 34px 0;
+            border-top: 1px solid var(--line);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            color: var(--muted);
+            font-size: 11px;
+        }
+
+        footer strong {
+            color: var(--ink);
+            font-size: 14px;
+        }
+
+        .toast {
+            position: fixed;
+            z-index: 30;
+            right: 22px;
+            bottom: 22px;
+            padding: 13px 17px;
+            border-radius: 99px;
+            background: var(--ink);
+            color: var(--paper);
+            font: 11px 'DM Mono', monospace;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: .35s ease;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        [data-reveal] {
+            opacity: 0;
+            transform: translateY(24px);
+        }
+
+        .is-visible {
+            opacity: 1;
+            transform: translateY(0);
+            transition:
+                opacity .7s ease,
+                transform .7s cubic-bezier(.2,.8,.2,1);
+        }
+
+        /* =========================================
+           HERO PLAYER
+        ========================================= */
+
+        .hero-player {
+            position: relative;
+            width: min(390px, 100%);
+            padding: 18px;
+            border-radius: 24px;
+            background: rgba(255, 253, 247, .78);
+            border: 1px solid rgba(37, 34, 30, .12);
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            transform: rotate(2deg);
+            transition:
+                transform .35s ease,
+                box-shadow .35s ease;
+        }
+/* ==========================================
+   FSX — LIQUID ALBUM ART
+========================================== */
+
+.hero-player-art {
+    width: 100%;
+    aspect-ratio: 1;
+    position: relative;
+    isolation: isolate;
+    overflow: visible;
+    border-radius: 16px;
+    margin-bottom: 18px;
+    background: transparent;
+}
+
+/* ==========================================
+   MAIN LIQUID BLOB
+========================================== */
+
+.hero-player-art::before {
+    content: "";
+    position: absolute;
+
+    /*
+     * Bigger than the album itself so the
+     * liquid can visibly surround it.
+     */
+    width: 104%;
+    height: 104%;
+
+    left: -2%;
+    top: -2%;
+
+    z-index: -2;
+
+    border-radius: var(--liquid-radius, 50%);
+
+    background:
+        radial-gradient(
+            circle at 35% 28%,
+            rgba(var(--ambient-rgb, 238, 157, 158), .95),
+            rgba(var(--ambient-rgb, 238, 157, 158), .78) 48%,
+            rgba(var(--ambient-rgb, 238, 157, 158), .58) 100%
+        );
+
+    /*
+     * MUCH less blur.
+     * This keeps the blob shape visible.
+     */
+    filter: blur(7px);
+
+    opacity: var(--glob-alpha, .72);
+
+    transform:
+        scale(var(--glob-scale, 1.04))
+        rotate(-5deg);
+
+    transition:
+        background .6s ease,
+        opacity .25s ease;
+
+    animation:
+        liquidIdle 7s ease-in-out infinite alternate;
+
+    pointer-events: none;
+}
+
+
+/* ==========================================
+   SOFT OUTER GLOW
+========================================== */
+
+.hero-player-art::after {
+    content: "";
+
+    position: absolute;
+
+    inset: -18px;
+
+    z-index: -3;
+
+    border-radius: 50%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(var(--ambient-rgb, 238, 157, 158), .22),
+            transparent 68%
+        );
+
+    /*
+     * Only the outer glow is heavily blurred.
+     */
+    filter: blur(16px);
+
+    opacity: .65;
+
+    transform:
+        scale(var(--glob-scale, 1.04));
+
+    pointer-events: none;
+}
+
+
+/* ==========================================
+   ACTUAL ALBUM ART
+========================================== */
+
+.hero-player-art img {
+    position: relative;
+    z-index: 2;
+
+    width: 100%;
+    height: 100%;
+
+    display: block;
+
+    object-fit: cover;
+
+    border-radius: 16px;
+
+    /*
+     * Keeps the actual artwork completely sharp.
+     */
+    filter: none;
+    opacity: 1;
+
+    box-shadow:
+        0 22px 45px rgba(37, 34, 30, .18);
+
+    transition:
+        transform .45s cubic-bezier(.2,.8,.2,1),
+        box-shadow .4s ease;
+}
+
+
+/* ==========================================
+   PLAYING STATE
+========================================== */
+
+.hero-player.is-playing .hero-player-art img {
+    box-shadow:
+        0 25px 55px
+        rgba(var(--ambient-rgb, 238, 157, 158), .30);
+}
+
+
+/* ==========================================
+   ORGANIC IDLE MOTION
+========================================== */
+
+@keyframes liquidIdle {
+
+    0% {
+        transform:
+            scale(var(--glob-scale, 1.04))
+            rotate(-5deg);
+    }
+
+    50% {
+        transform:
+            scale(
+                calc(var(--glob-scale, 1.04) + .02)
+            )
+            rotate(3deg);
+    }
+
+    100% {
+        transform:
+            scale(var(--glob-scale, 1.04))
+            rotate(-2deg);
+    }
+}
+        .hero-player:hover {
+            transform: rotate(0deg) translateY(-5px);
+            box-shadow: 0 30px 70px rgba(75, 60, 36, .17);
+        }
+
+
+        .hero-player-art img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .hero-player-info {
+            min-width: 0;
+        }
+
+        .hero-track-title {
+            font-size: clamp(16px, 2vw, 19px);
+            font-weight: 800;
+            letter-spacing: -.04em;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .hero-track-artist {
+            margin-top: 4px;
+            font-size: 12px;
+            color: var(--muted);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* =========================================
+           VISUALIZER
+        ========================================= */
+
+        .hero-visualizer {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 3px;
+            width: 100%;
+            height: 58px;
+            margin: 14px 0 4px;
+            padding: 0 3px;
+            overflow: hidden;
+        }
+
+        .hero-visualizer span {
+            flex: 1 1 0;
+            min-width: 2px;
+            max-width: 5px;
+            height: var(--bar-height);
+            border-radius: 999px;
+            background: var(--pink);
+            opacity: .85;
+            transform-origin: center;
+            transition:
+                height .18s ease,
+                opacity .2s ease;
+        }
+
+        .hero-player.is-playing .hero-visualizer span {
+            animation:
+                heroVisualizer .65s ease-in-out infinite alternate;
+            animation-delay: var(--delay);
+        }
+
+        @keyframes heroVisualizer {
+            0% {
+                transform: scaleY(.35);
+                opacity: .45;
+            }
+
+            100% {
+                transform: scaleY(1);
+                opacity: .95;
+            }
+        }
+
+        .hero-player:not(.is-playing) .hero-visualizer span {
+            transform: scaleY(.45);
+            opacity: .35;
+        }
+
+        .hero-progress {
+            height: 4px;
+            margin: 12px 0 7px;
+            border-radius: 999px;
+            background: rgba(37, 34, 30, .1);
+            cursor: pointer;
+            overflow: hidden;
+        }
+
+        .hero-progress-fill {
+            width: 0;
+            height: 100%;
+            border-radius: inherit;
+            background: var(--pink-deep);
+            transition: width .08s linear;
+        }
+
+        .hero-time {
+            display: flex;
+            justify-content: space-between;
+            color: var(--muted);
+            font: 9px 'DM Mono', monospace;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .hero-player-controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 22px;
+            margin: 14px 0 5px;
+        }
+
+        .hero-player-controls button {
+            border: 0;
+            background: transparent;
+            color: var(--ink);
+            padding: 7px;
+            font-size: 15px;
+            transition:
+                transform .2s ease,
+                opacity .2s ease;
+        }
+
+        .hero-player-controls button:hover {
+            transform: scale(1.12);
+        }
+
+        .hero-play {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: var(--ink) !important;
+            color: var(--yellow) !important;
+            font-size: 15px !important;
+        }
+
+        .hero-copy-wrap {
+            min-width: 0;
+        }
+
+        .hero-player {
+            min-width: 0;
+        }
+
+        /* =========================================
+           RESPONSIVE
+        ========================================= */
+
+        @media (max-width: 900px) {
+            .hero {
+                grid-template-columns: 1fr .85fr;
+                gap: 30px;
+            }
+
+            h1 {
+                font-size: clamp(52px, 8vw, 76px);
+            }
+        }
+
+        @media (max-width: 760px) {
+            .wrap {
+                width: min(100% - 32px, 560px);
+            }
+
+            .nav {
+                height: 72px;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .nav-cta {
+                padding: 10px 14px;
+            }
+
+            .hero {
+                display: flex;
+                flex-direction: column;
+                align-items: stretch;
+                gap: 0;
+                padding: 55px 0 75px;
+            }
+
+            .hero-copy-wrap {
+                width: 100%;
+            }
+
+            .hero::before {
+                width: 290px;
+                height: 290px;
+                right: -80px;
+                top: 270px;
+            }
+
+            h1 {
+                font-size: clamp(54px, 16vw, 82px);
+            }
+
+            .hero-copy {
+                max-width: 520px;
+                font-size: 14px;
+            }
+
+            .hero-actions {
+                margin-top: 26px;
+                flex-wrap: wrap;
+            }
+
+            .hero-note {
+                flex-wrap: wrap;
+            }
+
+            .hero-player {
+                width: min(390px, 100%);
+                margin-top: 65px;
+                align-self: center;
+                transform: rotate(1deg);
+            }
+
+            .hero-player-art {
+                margin-bottom: 15px;
+            }
+
+            .hero-visualizer {
+                height: 50px;
+            }
+
+            .hero-player-controls {
+                gap: 18px;
+            }
+
+            section {
+                padding: 82px 0;
+            }
+
+            .section-head {
+                display: block;
+                margin-bottom: 35px;
+            }
+
+            .section-head p {
+                margin-top: 20px;
+            }
+
+            .feature-grid,
+            .showcase-grid,
+            .download,
+            .detail-grid {
+                grid-template-columns: 1fr;
+                gap: 0;
+            }
+
+            .feature {
+                min-height: 220px;
+                padding-right: 0;
+            }
+
+            .feature + .feature {
+                padding-left: 0;
+                border-left: 0;
+            }
+
+            .feature h3 {
+                margin-top: 38px;
+            }
+
+            .feature-lab {
+                padding: 82px 0;
+            }
+
+            .detail-intro {
+                position: static;
+                margin-bottom: 38px;
+            }
+
+            .detail-card {
+                grid-template-columns: 43px 1fr;
+                padding: 20px;
+            }
+
+            .detail-tag {
+                grid-column: 2;
+                justify-self: start;
+                margin-top: -8px;
+            }
+
+            .shot.large {
+                height: 330px;
+            }
+
+            .shot.small {
+                height: 210px;
+            }
+
+            .shot + .shot {
+                margin-top: 16px;
+            }
+
+            .download {
+                gap: 38px;
+            }
+
+            .download-card {
+                padding: 20px;
+            }
+
+            footer {
+                display: block;
+                line-height: 2;
+            }
+
+            footer span {
+                display: block;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .wrap {
+                width: calc(100% - 28px);
+            }
+
+            .hero {
+                padding-top: 42px;
+                padding-bottom: 65px;
+            }
+
+            h1 {
+                font-size: clamp(48px, 15vw, 68px);
+            }
+
+            .hero-copy {
+                font-size: 13px;
+                line-height: 1.7;
+            }
+
+            .hero-actions {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .hero-actions .button {
+                width: 100%;
+                text-align: center;
+            }
+
+            .hero-player {
+                margin-top: 55px;
+            }
+
+            .hero-visualizer {
+                height: 45px;
+                gap: 2px;
+            }
+
+            .hero-visualizer span {
+                max-width: 4px;
+            }
+
+            .hero-player-controls {
+                margin-top: 11px;
+            }
+
+            .ticker-track {
+                gap: 24px;
+            }
+
+            section {
+                padding: 70px 0;
+            }
+
+            .feature-lab {
+                padding: 70px 0;
+            }
+
+            .detail-card {
+                grid-template-columns: 42px minmax(0, 1fr);
+                gap: 14px;
+            }
+
+            .detail-card p {
+                max-width: none;
+            }
+
+            .detail-tag {
+                grid-column: 2;
+            }
+
+            .download-row {
+                gap: 12px;
+            }
+
+            .download-platform {
+                min-width: 0;
+            }
+
+            .download-platform > span:last-child {
+                min-width: 0;
+            }
+
+            .download-row small {
+                white-space: normal;
+            }
+
+            .shot.large {
+                height: min(330px, 80vw);
+            }
+
+            .shot.small {
+                height: min(210px, 55vw);
+            }
+        }
+
+        @media (max-width: 420px) {
+            .hero-player {
+                padding: 14px;
+                border-radius: 20px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                animation-duration: .01ms !important;
+                transition-duration: .01ms !important;
+                scroll-behavior: auto !important;
+            }
+
+            [data-reveal] {
+                opacity: 1;
+                transform: none;
+            }
+        }
+        .footer-main {
+display: flex;
+align-items: center;
+justify-content: space-between;
+gap: 24px;
+padding-bottom: 30px;
+}
+
+.music-credits {
+padding-top: 28px;
+border-top: 1px solid var(--line);
+display: grid;
+gap: 22px;
+}
+
+.music-credits-head {
+display: flex;
+align-items: baseline;
+justify-content: space-between;
+gap: 20px;
+}
+
+.music-credits-head strong {
+font-size: 12px;
+text-transform: uppercase;
+letter-spacing: .12em;
+}
+
+.music-credits-head span {
+color: var(--muted);
+font: 9px 'DM Mono', monospace;
+text-transform: uppercase;
+letter-spacing: .12em;
+}
+
+.music-credit {
+display: grid;
+gap: 5px;
+padding-bottom: 20px;
+border-bottom: 1px solid var(--line);
+color: var(--muted);
+font: 10px/1.6 'DM Mono', monospace;
+}
+
+.music-credit:last-child {
+padding-bottom: 0;
+border-bottom: 0;
+}
+
+.music-credit > strong {
+color: var(--ink);
+font: 600 12px/1.5 Manrope, sans-serif;
+}
+
+.music-credit a {
+color: var(--pink-deep);
+text-decoration: underline;
+text-underline-offset: 3px;
+}
+
+.music-credit a:hover {
+color: var(--ink);
+}
+
+@media (max-width: 760px) {
+.footer-main {
+display: block;
+padding-bottom: 26px;
+}
+
+.footer-main > span {
+    display: block;
+}
+
+.music-credits-head {
+    display: block;
+}
+
+.music-credits-head span {
+    display: block;
+    margin-top: 5px;
+}
+
+.music-credit > strong {
+    font-size: 11px;
+}
+}
+    </style>
+</head>
+
+<body>
+
+    <div class="grain"></div>
+
+    <header class="nav wrap">
+
+        <a class="brand" href="#top" aria-label="FSX home">
+            <span class="brand-mark">f</span>
+            fsx
+        </a>
+
+        <nav class="nav-links" aria-label="Main navigation">
+            <a href="#features">Why FSX</a>
+            <a href="#showcase">Showcase</a>
+        </nav>
+
+        <a class="nav-cta" href="#download">
+            Get FSX
+            <span aria-hidden="true">↗</span>
+        </a>
+
+    </header>
+
+    <main id="top">
+
+        <!-- HERO -->
+        <section class="hero wrap">
+
+            <div class="hero-copy-wrap" data-reveal>
+
+                <div class="eyebrow">
+                    <i></i>
+                    Host your own music library
+                </div>
+
+                <h1>
+                    A softer way to <em>listen.</em>
+                </h1>
+
+                <p class="hero-copy">
+                    Selhosting is the way to freedom, self host your own music also easy song download
+                </p>
+
+                <div class="hero-actions">
+                    <a class="button primary" href="#download">
+                        Bring music home
+                        <span aria-hidden="true">↗</span>
+                    </a>
+
+                    <a class="text-link" href="#showcase">
+                        See it in action
+                    </a>
+                </div>
+
+                <div class="hero-note">
+
+                    <span class="avatar-stack">
+                        <i class="avatar"></i>
+                        <i class="avatar"></i>
+                    </span>
+
+                    made for freedom by yocrrz and abduhamid
+
+                </div>
+
+            </div>
+
+            <!-- HERO PLAYER -->
+            <div class="hero-player" id="heroPlayer">
+
+                <div class="hero-player-art">
+                    <img
+                        id="heroCover"
+                        src="static/covers/default.jpg"
+                        alt="Album artwork"
+                    >
+                </div>
+
+                <div class="hero-player-info">
+
+                    <div
+                        class="hero-track-title"
+                        id="heroTitle"
+                    >
+                        Nothing playing
+                    </div>
+
+                    <div
+                        class="hero-track-artist"
+                        id="heroArtist"
+                    >
+                        FSX
+                    </div>
+
+                </div>
+
+                <div
+                    class="hero-progress"
+                    id="heroProgressTrack"
+                    role="slider"
+                    aria-label="Song progress"
+                    aria-valuemin="0"
+                    aria-valuemax="100"
+                    aria-valuenow="0"
+                >
+                    <div
+                        class="hero-progress-fill"
+                        id="heroProgress"
+                    ></div>
+                </div>
+
+                <div class="hero-time">
+                    <span id="heroCurrent">0:00</span>
+                    <span id="heroDuration">0:00</span>
+                </div>
+
+                <div class="hero-player-controls">
+
+                    <button
+                        type="button"
+                        onclick="heroPrev()"
+                        aria-label="Previous"
+                    >
+                        ⏮
+                    </button>
+
+                    <button
+                        type="button"
+                        class="hero-play"
+                        id="heroPlay"
+                        onclick="heroToggle()"
+                        aria-label="Play"
+                    >
+                        ▶
+                    </button>
+
+                    <button
+                        type="button"
+                        onclick="heroNext()"
+                        aria-label="Next"
+                    >
+                        ⏭
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- TICKER -->
+        <div class="ticker">
+            <div class="ticker-track">
+
+                <span>search less <b>✳</b></span>
+                <span>listen more <b>✳</b></span>
+                <span>lyrics included <b>✳</b></span>
+                <span>your library, lovely <b>✳</b></span>
+
+                <span>search less <b>✳</b></span>
+                <span>listen more <b>✳</b></span>
+                <span>lyrics included <b>✳</b></span>
+                <span>your library, lovely <b>✳</b></span>
+
+            </div>
+        </div>
+
+        <!-- FEATURES -->
+        <section class="wrap" id="features">
+
+            <div class="section-head" data-reveal>
+
+                <div>
+
+                    <div class="kicker">
+                        01 / somethings
+                    </div>
+
+                    <h2>
+                        Everything you need.<br>
+                        <em>Nothing you don't.</em>
+                    </h2>
+
+                </div>
+
+                <p>
+                    Created for fast, smooth and freedom experience
+                </p>
+
+            </div>
+
+            <div class="feature-grid">
+
+                <article class="feature" data-reveal>
+
+                    <span class="feature-num">01</span>
+
+                    <span class="feature-icon">⌕</span>
+
+                    <h3>Fast as helll</h3>
+
+                    <p>
+                        Search for a track or artist and get to
+                        the good stuff quickly. No maze, no fuss.
+                    </p>
+
+                </article>
+
+                <article class="feature" data-reveal>
+
+                    <span class="feature-num">02</span>
+
+                    <span class="feature-icon">♫</span>
+
+                    <h3>Bring your own</h3>
+
+                    <p>
+                        Upload the songs you already have. FSX sorts
+                        the details and keeps your collection feeling like yours. also inbuilt spotify search and download.
+                    </p>
+
+                </article>
+
+                <article class="feature" data-reveal>
+
+                    <span class="feature-num">03</span>
+
+                    <span class="feature-icon">〰</span>
+
+                    <h3>Awesome features</h3>
+
+                    <p>
+                        Lyrics, album art, awesome UI/UX
+                    </p>
+
+                </article>
+
+            </div>
+
+        </section>
+
+        <!-- DETAILS -->
+        <section class="feature-lab" id="details">
+
+            <div class="wrap detail-grid">
+
+                <div class="detail-intro" data-reveal>
+
+                    <div class="kicker">
+                        01.5 / under the hood
+                    </div>
+                                        <span
+                        class="parallax-note"
+                        data-parallax="-0.12"
+                    >
+                        a little more magic ↘
+                    </span>
+
+                    <h2>
+                        Small details.<br>
+                        <em>Big difference.</em>
+                    </h2>
+
+                    <p>
+                        FSX keeps the complicated bits backstage, so
+                        your listening space stays light, personal,
+                        and ready when you are.
+                    </p>
+
+
+                </div>
+
+                <div class="detail-list">
+
+                    <article
+                        class="detail-card"
+                        data-reveal
+                        data-parallax="0.05"
+                    >
+
+                        <span class="detail-index">01</span>
+
+                        <div>
+
+                            <h3>Spotify-powered discovery</h3>
+
+                            <p>
+                                Find songs by title, artist, or album
+                                with a quick search flow that gets you
+                                from curiosity to playback without detours.
+                            </p>
+
+
+                        </div>
+
+                        <span class="detail-tag">
+                            search / stream
+                        </span>
+
+                    </article>
+
+                    <article
+                        class="detail-card"
+                        data-reveal
+                        data-parallax="0.08"
+                    >
+
+                        <span class="detail-index">02</span>
+
+                        <div>
+
+                            <h3>Metadata that cleans itself up</h3>
+
+                            <p>
+                                Album art, artist names, titles, and file
+                                details are pulled together so your library
+                                feels considered instead of cluttered.
+                            </p>
+
+
+                        </div>
+
+                        <span class="detail-tag">
+                            art / order
+                        </span>
+
+                    </article>
+
+                    <article
+                        class="detail-card"
+                        data-reveal
+                        data-parallax="0.11"
+                    >
+
+                        <span class="detail-index">03</span>
+
+                        <div>
+
+                            <h3>Lyrics when the moment calls</h3>
+
+                            <p>
+                                Keep words close with synced lyric support,
+                                so a late-night singalong is one tap away
+                                and never in your way.
+                            </p>
+
+                        </div>
+
+                        <span class="detail-tag">
+                            lyrics / sync
+                        </span>
+
+                    </article>
+
+                    <article
+                        class="detail-card"
+                        data-reveal
+                        data-parallax="0.14"
+                    >
+
+                        <span class="detail-index">04</span>
+
+                        <div>
+
+                            <h3>Lightweight enough to host yourself</h3>
+
+                            <p>
+                                A small static site, simple local folders,
+                                and lightweight frontend code make it easy
+                                to run FSX on your own terms.
+                            </p>
+
+
+                        </div>
+
+                        <span class="detail-tag">
+                            static / local
+                        </span>
+
+                    </article>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- SHOWCASE -->
+        <section class="showcase" id="showcase">
+
+            <div class="wrap">
+
+                <div class="section-head" data-reveal>
+
+                    <div>
+
+                        <div class="kicker">
+                            02 / look around
+                        </div>
+
+                        <h2>
+                            Fits wherever<br>
+                            <em>you listen.</em>
+                        </h2>
+
+                    </div>
+
+                    <p>
+                        its freaking versatile everywhere (web)
+                    </p>
+
+                </div>
+
+                <div class="showcase-grid">
+
+                    <div class="shot large" data-reveal>
+
+                        <img
+                            src="../../assets/desktop.webp"
+                            alt="FSX desktop music player"
+                        >
+
+                        <span class="shot-label">
+                            desktop / spacious
+                        </span>
+
+                    </div>
+
+                    <div>
+
+                        <div class="shot small" data-reveal>
+
+                            <img
+                                src="../../assets/lib.jpg"
+                                alt="FSX library view"
+                            >
+
+                            <span class="shot-label">
+                                library / yours
+                            </span>
+
+                        </div>
+
+                        <div class="shot small" data-reveal>
+
+                            <img
+                                src="../../assets/android.webp"
+                                alt="FSX Android music player"
+                            >
+
+                            <span class="shot-label">
+                                android / pocket-sized
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- DOWNLOAD -->
+        <section class="wrap download" id="download">
+
+            <div data-reveal>
+
+                <div class="kicker">
+                    03 / take it with you
+                </div>
+
+                <h2>
+                    Your next favorite player is a download away.
+                </h2>
+
+                <p class="download-copy">
+                    Host your own music with freedom and smoothness.
+                </p>
+
+               
+            </div>
+
+            <div class="download-card" data-reveal>
+
+                <div class="download-row">
+
+                    <div class="download-platform">
+
+                        <span class="platform-icon">
+                            ⌘
+                        </span>
+
+                        <span>
+                            Run locally
+
+                            <small>
+                                Static · open source
+                            </small>
+                        </span>
+
+                    </div>
+
+                    <a
+                        class="download-btn"
+                        href="https://github.com/YOCRRZ224/FSX"
+                        target="_blank"
+                        rel="noreferrer"
+                    >
+                        GitHub ↗
+                    </a>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+<footer class="wrap">
+
+<div class="footer-main">
+    <strong>fsx</strong>
+
+    <span>
+        made for music, by people who listen to it a lot.
+    </span>
+
+    <span>
+        © 2024 FSX
+    </span>
+</div>
+
+<div class="music-credits">
+
+    <div class="music-credits-head">
+        <strong>music credits</strong>
+        <span>soundtrack / attribution</span>
+    </div>
+
+    <div class="music-credit">
+        <strong>Lynxie, johnny joined — i still hear your voice</strong>
+        <span>Music provided by NoCopyrightSounds</span>
+        <span>Free Download/Stream: <a href="http://ncs.io/istillhearyourvoice" target="_blank" rel="noreferrer">ncs.io/istillhearyourvoice</a></span>
+        <span>Watch: <a href="http://ncs.lnk.to/istillhearyourvoiceAT/youtube" target="_blank" rel="noreferrer">YouTube</a></span>
+    </div>
+
+    <div class="music-credit">
+        <strong>Cartoon, Jéja — On & On (feat. Daniel Levi) [NCS Release]</strong>
+        <span>Music provided by NoCopyrightSounds</span>
+        <span>Free Download/Stream: <a href="http://ncs.io/onandon" target="_blank" rel="noreferrer">ncs.io/onandon</a></span>
+        <span>Watch: <a href="http://youtu.be/K4DyBUG242c" target="_blank" rel="noreferrer">YouTube</a></span>
+    </div>
+
+    <div class="music-credit">
+        <strong>LFZ — Popsicle [NCS Release]</strong>
+        <span>Music provided by NoCopyrightSounds</span>
+        <span>Free Download/Stream: <a href="http://ncs.io/Popsicle" target="_blank" rel="noreferrer">ncs.io/Popsicle</a></span>
+        <span>Watch: <a href="http://youtu.be/K8DUjObr_tU" target="_blank" rel="noreferrer">YouTube</a></span>
+    </div>
+
+</div>
+
+
+</footer>
+
+
+    <div class="toast" id="toast">
+        Your download is getting ready ✳
+    </div>
+
+
+    <script>
+
+        /* =========================================
+           DOWNLOAD TOAST
+        ========================================= */
+
+        const toast = document.querySelector("#toast");
+
+        document
+            .querySelectorAll(".download-btn, .download-main")
+            .forEach((button) => {
+
+                button.addEventListener("click", () => {
+
+                    toast.classList.add("show");
+
+                    setTimeout(() => {
+                        toast.classList.remove("show");
+                    }, 2600);
+
+                });
+
+            });
+
+
+        /* =========================================
+           SCROLL REVEAL
+        ========================================= */
+
+        const reveal = new IntersectionObserver(
+            (entries) => {
+
+                entries.forEach((entry) => {
+
+                    if (entry.isIntersecting) {
+
+                        entry.target.classList.add("is-visible");
+
+                        reveal.unobserve(entry.target);
+
+                    }
+
+                });
+
+            },
+            {
+                threshold: .15
+            }
+        );
+
+
+        document
+            .querySelectorAll("[data-reveal]")
+            .forEach((item) => reveal.observe(item));
+
+
+        /* =========================================
+           ANIME.JS
+        ========================================= */
+
+        if (window.anime) {
+
+            anime({
+                targets: ".hero-player",
+                translateY: [-10, 10],
+                direction: "alternate",
+                loop: true,
+                easing: "easeInOutSine",
+                duration: 3000
+            });
+
+        }
+
+
+        
+        const heroTracks = [
+
+            {
+                title: "On & On",
+                artist: "Cartoon, Daniel Levi, Jéja",
+                src: "./On%20%26%20On.mp3",
+
+                cover:
+                    "onndon.jpg"
+            },
+
+            {
+                title: "i still hear your voice",
+                artist: "johnny joined, Lynxie",
+                src: "./i-still.mp3",
+                cover:
+                    "still.jpg"
+            },
+
+            {
+                title: "Popsicle",
+                artist: "LFZ",
+                src: "./popsickle.mp3",
+                cover:
+                    "popsicle.jpg"
+            }
+
+        ];
+
+
+        let heroIndex = 0;
+
+
+        /*
+         * Create one persistent Audio object.
+         */
+        const heroAudio = new Audio();
+
+        heroAudio.preload = "metadata";
+
+
+        /* =========================================
+           LOAD TRACK
+        ========================================= */
+
+        function loadHeroTrack(index, autoplay = false) {
+
+            heroIndex =
+                (index + heroTracks.length) %
+                heroTracks.length;
+
+            const track =
+                heroTracks[heroIndex];
+
+
+            console.log(
+                "[FSX] Loading track:",
+                track.src
+            );
+
+
+            /*
+             * Stop current audio.
+             */
+            heroAudio.pause();
+
+            heroAudio.currentTime = 0;
+
+
+            /*
+             * Set new source.
+             */
+            heroAudio.src = track.src;
+
+            heroAudio.load();
+
+
+            /*
+             * Update UI.
+             */
+            document
+                .getElementById("heroTitle")
+                .textContent = track.title;
+
+            document
+                .getElementById("heroArtist")
+                .textContent = track.artist;
+
+            const heroCover =
+    document.getElementById("heroCover");
+
+heroCover.crossOrigin = "anonymous";
+
+heroCover.onload = () => {
+    extractDominantColor(heroCover);
+};
+
+heroCover.onerror = () => {
+    document.documentElement.style.setProperty(
+        "--ambient-rgb",
+        "238, 157, 158"
+    );
+};
+
+heroCover.src = track.cover;
+
+
+            document
+                .getElementById("heroProgress")
+                .style.width = "0%";
+
+            document
+                .getElementById("heroCurrent")
+                .textContent = "0:00";
+
+            document
+                .getElementById("heroDuration")
+                .textContent = "0:00";
+
+
+            document
+                .getElementById("heroProgressTrack")
+                .setAttribute(
+                    "aria-valuenow",
+                    "0"
+                );
+
+
+            updateHeroPlayButton();
+
+
+            /*
+             * Autoplay only when explicitly requested
+             * by a user interaction such as Next.
+             */
+            if (autoplay) {
+                playHeroAudio();
+            }
+
+        }
+
+
+        /* =========================================
+           PLAY AUDIO
+        ========================================= */
+
+        async function playHeroAudio() {
+
+            try {
+
+                console.log(
+                    "[FSX] Attempting playback:",
+                    heroAudio.src
+                );
+
+                await heroAudio.play();
+
+            } catch (error) {
+
+                console.error(
+                    "[FSX] Audio playback failed:",
+                    error
+                );
+
+                console.error(
+                    "[FSX] Audio URL:",
+                    heroAudio.src
+                );
+
+                showHeroError(
+                    "Couldn't play this song"
+                );
+
+            }
+
+        }
+
+
+        /* =========================================
+           ERROR TOAST
+        ========================================= */
+
+        function showHeroError(message) {
+
+            const toast =
+                document.getElementById("toast");
+
+            if (!toast) return;
+
+
+            toast.textContent = message;
+
+            toast.classList.add("show");
+
+
+            clearTimeout(
+                window.heroToastTimer
+            );
+
+
+            window.heroToastTimer =
+                setTimeout(() => {
+
+                    toast.classList.remove("show");
+
+                }, 3000);
+
+        }
+
+
+        /* =========================================
+           PLAY / PAUSE
+        ========================================= */
+
+        function heroToggle() {
+
+            if (heroAudio.paused) {
+
+                playHeroAudio();
+
+            } else {
+
+                heroAudio.pause();
+
+            }
+
+        }
+
+
+        /* =========================================
+           PLAY BUTTON
+        ========================================= */
+
+        function updateHeroPlayButton() {
+
+            const btn =
+                document.getElementById("heroPlay");
+
+            if (!btn) return;
+
+
+            btn.textContent =
+                heroAudio.paused
+                    ? "▶"
+                    : "Ⅱ";
+
+
+            btn.setAttribute(
+                "aria-label",
+                heroAudio.paused
+                    ? "Play"
+                    : "Pause"
+            );
+
+        }
+
+
+        /* =========================================
+           NEXT TRACK
+        ========================================= */
+
+        function heroNext() {
+
+            loadHeroTrack(
+                heroIndex + 1,
+                true
+            );
+
+        }
+
+
+        /* =========================================
+           PREVIOUS TRACK
+        ========================================= */
+
+        function heroPrev() {
+
+            if (heroAudio.currentTime > 3) {
+
+                heroAudio.currentTime = 0;
+
+                return;
+
+            }
+
+            loadHeroTrack(
+                heroIndex - 1,
+                true
+            );
+
+        }
+
+
+        /* =========================================
+           AUDIO EVENTS
+        ========================================= */
+
+        heroAudio.addEventListener(
+            "loadstart",
+            () => {
+
+                console.log(
+                    "[FSX] Loading:",
+                    heroAudio.src
+                );
+
+            }
+        );
+
+
+        heroAudio.addEventListener(
+            "loadedmetadata",
+            () => {
+
+                console.log(
+                    "[FSX] Audio metadata loaded:",
+                    heroAudio.duration,
+                    "seconds"
+                );
+
+
+                document
+                    .getElementById("heroDuration")
+                    .textContent =
+                    formatHeroTime(
+                        heroAudio.duration
+                    );
+
+            }
+        );
+
+
+        heroAudio.addEventListener(
+            "canplay",
+            () => {
+
+                console.log(
+                    "[FSX] Audio can play"
+                );
+
+            }
+        );
+
+
+        heroAudio.addEventListener(
+            "play",
+            () => {
+
+                console.log(
+                    "[FSX] Playback started"
+                );
+
+
+                updateHeroPlayButton();
+
+
+                document
+                    .getElementById("heroPlayer")
+                    .classList.add("is-playing");
+
+            }
+        );
+
+
+        heroAudio.addEventListener(
+            "pause",
+            () => {
+
+                console.log(
+                    "[FSX] Playback paused"
+                );
+
+
+                updateHeroPlayButton();
+
+
+                document
+                    .getElementById("heroPlayer")
+                    .classList.remove("is-playing");
+
+            }
+        );
+
+
+        heroAudio.addEventListener(
+            "ended",
+            () => {
+
+                console.log(
+                    "[FSX] Track ended"
+                );
+
+                heroNext();
+
+            }
+        );
+
+
+        /* =========================================
+           AUDIO ERROR
+        ========================================= */
+
+        heroAudio.addEventListener(
+            "error",
+            () => {
+
+                console.error(
+                    "========== FSX AUDIO ERROR =========="
+                );
+
+                console.error(
+                    "URL:",
+                    heroAudio.src
+                );
+
+                console.error(
+                    "Error:",
+                    heroAudio.error
+                );
+
+
+                let message =
+                    "Audio couldn't be loaded";
+
+
+                if (heroAudio.error) {
+
+                    switch (heroAudio.error.code) {
+
+                        case MediaError.MEDIA_ERR_ABORTED:
+
+                            message =
+                                "Audio loading was aborted";
+
+                            break;
+
+
+                        case MediaError.MEDIA_ERR_NETWORK:
+
+                            message =
+                                "Network error while loading audio";
+
+                            break;
+
+
+                        case MediaError.MEDIA_ERR_DECODE:
+
+                            message =
+                                "Audio format couldn't be decoded";
+
+                            break;
+
+
+                        case MediaError.MEDIA_ERR_SRC_NOT_SUPPORTED:
+
+                            message =
+                                "Audio file wasn't found or isn't supported";
+
+                            break;
+
+                    }
+
+                }
+
+
+                showHeroError(message);
+
+            }
+        );
+
+
+        /* =========================================
+           TIME / PROGRESS
+        ========================================= */
+
+        heroAudio.addEventListener(
+            "timeupdate",
+            () => {
+
+                if (
+                    !Number.isFinite(
+                        heroAudio.duration
+                    ) ||
+                    heroAudio.duration <= 0
+                ) {
+
+                    return;
+
+                }
+
+
+                const percentage =
+                    (
+                        heroAudio.currentTime /
+                        heroAudio.duration
+                    ) * 100;
+
+
+                document
+                    .getElementById("heroProgress")
+                    .style.width =
+                    `${percentage}%`;
+
+
+                document
+                    .getElementById("heroCurrent")
+                    .textContent =
+                    formatHeroTime(
+                        heroAudio.currentTime
+                    );
+
+
+                document
+                    .getElementById("heroProgressTrack")
+                    .setAttribute(
+                        "aria-valuenow",
+                        percentage.toFixed(1)
+                    );
+
+            }
+        );
+
+
+        /* =========================================
+           TIME FORMAT
+        ========================================= */
+
+        function formatHeroTime(seconds) {
+
+            if (
+                !Number.isFinite(seconds)
+            ) {
+
+                return "0:00";
+
+            }
+
+
+            const minutes =
+                Math.floor(seconds / 60);
+
+
+            const secs =
+                Math.floor(seconds % 60);
+
+
+            return (
+                `${minutes}:${String(secs).padStart(2, "0")}`
+            );
+
+        }
+
+
+        /* =========================================
+           CLICK PROGRESS BAR
+        ========================================= */
+
+        document
+            .getElementById("heroProgressTrack")
+            .addEventListener(
+                "click",
+                (event) => {
+
+                    if (
+                        !Number.isFinite(
+                            heroAudio.duration
+                        ) ||
+                        heroAudio.duration <= 0
+                    ) {
+
+                        return;
+
+                    }
+
+
+                    const rect =
+                        event.currentTarget
+                            .getBoundingClientRect();
+
+
+                    const percentage =
+                        (
+                            event.clientX -
+                            rect.left
+                        ) / rect.width;
+
+
+                    const clamped =
+                        Math.max(
+                            0,
+                            Math.min(
+                                1,
+                                percentage
+                            )
+                        );
+
+
+                    heroAudio.currentTime =
+                        clamped *
+                        heroAudio.duration;
+
+                }
+            );
+
+
+        
+        /* =========================================
+   LIQUID AUDIO VISUALIZER
+========================================= */
+
+let heroAudioCtx = null;
+let heroAnalyser = null;
+let heroSource = null;
+let heroFreqData = null;
+
+let heroVisualizerStarted = false;
+let heroVisualizerFrame = null;
+
+let bassMovingAverage = 0;
+let currentBass = 0;
+
+let dynamicCoverColor =
+    "rgba(238, 157, 158, ";
+
+
+/* =========================================
+   INITIALIZE WEB AUDIO
+========================================= */
+
+function initHeroAudioVisualizer() {
+
+    if (heroVisualizerStarted) {
+        return;
+    }
+
+    try {
+
+        heroAudioCtx =
+            new (
+                window.AudioContext ||
+                window.webkitAudioContext
+            )();
+
+        heroAnalyser =
+            heroAudioCtx.createAnalyser();
+
+        heroAnalyser.fftSize = 256;
+
+        heroAnalyser.smoothingTimeConstant = 0;
+
+        heroSource =
+            heroAudioCtx.createMediaElementSource(
+                heroAudio
+            );
+
+        heroSource.connect(heroAnalyser);
+
+        heroAnalyser.connect(
+            heroAudioCtx.destination
+        );
+
+        heroFreqData =
+            new Uint8Array(
+                heroAnalyser.frequencyBinCount
+            );
+
+        heroVisualizerStarted = true;
+
+        console.log(
+            "[FSX] Liquid visualizer initialized"
+        );
+
+    } catch (error) {
+
+        console.warn(
+            "[FSX] Visualizer unavailable:",
+            error
+        );
+
+    }
+}
+
+
+/* =========================================
+   AUDIO PLAY
+========================================= */
+
+heroAudio.addEventListener(
+    "play",
+    async () => {
+
+        initHeroAudioVisualizer();
+
+        if (
+            heroAudioCtx &&
+            heroAudioCtx.state === "suspended"
+        ) {
+
+            try {
+
+                await heroAudioCtx.resume();
+
+            } catch (error) {
+
+                console.warn(
+                    "[FSX] AudioContext resume failed:",
+                    error
+                );
+
+            }
+
+        }
+
+        if (!heroVisualizerFrame) {
+
+            renderHeroLiquid();
+
+        }
+
+    }
+);
+
+
+/* =========================================
+   AUDIO PAUSE
+========================================= */
+
+heroAudio.addEventListener(
+    "pause",
+    () => {
+
+        if (heroVisualizerFrame) {
+
+            cancelAnimationFrame(
+                heroVisualizerFrame
+            );
+
+            heroVisualizerFrame = null;
+
+        }
+
+    }
+);
+
+
+/* =========================================
+   EXTRACT COVER COLOR
+========================================= */
+
+function extractDominantColor(imgElement) {
+
+    try {
+
+        const canvas =
+            document.createElement("canvas");
+
+        const size = 32;
+
+        canvas.width = size;
+        canvas.height = size;
+
+        const ctx =
+            canvas.getContext(
+                "2d",
+                {
+                    willReadFrequently: true
+                }
+            );
+
+        ctx.drawImage(
+            imgElement,
+            0,
+            0,
+            size,
+            size
+        );
+
+        const data =
+            ctx.getImageData(
+                0,
+                0,
+                size,
+                size
+            ).data;
+
+        const colors = [];
+
+
+        for (
+            let i = 0;
+            i < data.length;
+            i += 4
+        ) {
+
+            const r = data[i];
+            const g = data[i + 1];
+            const b = data[i + 2];
+            const a = data[i + 3];
+
+            if (a < 128) {
+                continue;
+            }
+
+            const brightness =
+                (r + g + b) / 3;
+
+            if (brightness < 15) {
+                continue;
+            }
+
+            colors.push({
+                r,
+                g,
+                b
+            });
+
+        }
+
+
+        if (!colors.length) {
+
+            throw new Error(
+                "No usable colors"
+            );
+
+        }
+
+
+        const buckets = new Map();
+
+
+        for (const c of colors) {
+
+            const r =
+                Math.floor(c.r / 32);
+
+            const g =
+                Math.floor(c.g / 32);
+
+            const b =
+                Math.floor(c.b / 32);
+
+            const key =
+                `${r},${g},${b}`;
+
+
+            if (!buckets.has(key)) {
+
+                buckets.set(
+                    key,
+                    {
+                        count: 0,
+                        r: 0,
+                        g: 0,
+                        b: 0
+                    }
+                );
+
+            }
+
+
+            const bucket =
+                buckets.get(key);
+
+            bucket.count++;
+
+            bucket.r += c.r;
+            bucket.g += c.g;
+            bucket.b += c.b;
+
+        }
+
+
+        let dominant = null;
+
+
+        for (
+            const bucket
+            of buckets.values()
+        ) {
+
+            if (
+                !dominant ||
+                bucket.count >
+                dominant.count
+            ) {
+
+                dominant = bucket;
+
+            }
+
+        }
+
+
+        let r =
+            Math.round(
+                dominant.r /
+                dominant.count
+            );
+
+        let g =
+            Math.round(
+                dominant.g /
+                dominant.count
+            );
+
+        let b =
+            Math.round(
+                dominant.b /
+                dominant.count
+            );
+
+
+        const max =
+            Math.max(r, g, b);
+
+        const min =
+            Math.min(r, g, b);
+
+
+        if (max - min > 20) {
+
+            if (r === max) {
+
+                r = Math.min(
+                    Math.round(r * 1.10),
+                    255
+                );
+
+            }
+
+            if (g === max) {
+
+                g = Math.min(
+                    Math.round(g * 1.10),
+                    255
+                );
+
+            }
+
+            if (b === max) {
+
+                b = Math.min(
+                    Math.round(b * 1.10),
+                    255
+                );
+
+            }
+
+        }
+
+
+        dynamicCoverColor =
+            `rgba(${r}, ${g}, ${b}, `;
+
+
+        document.documentElement.style.setProperty(
+            "--ambient-rgb",
+            `${r}, ${g}, ${b}`
+        );
+
+
+    } catch (error) {
+
+        console.warn(
+            "[FSX] Cover color extraction failed:",
+            error
+        );
+
+
+        dynamicCoverColor =
+            "rgba(238, 157, 158, ";
+
+
+        document.documentElement.style.setProperty(
+            "--ambient-rgb",
+            "238, 157, 158"
+        );
+
+    }
+
+}
+
+
+/* =========================================
+   RENDER LIQUID
+========================================= */
+
+function renderHeroLiquid() {
+
+    if (
+        !heroVisualizerStarted ||
+        heroAudio.paused
+    ) {
+
+        heroVisualizerFrame = null;
+
+        return;
+
+    }
+
+
+    heroAnalyser.getByteFrequencyData(
+        heroFreqData
+    );
+
+
+    /* -------------------------------
+       BASS DETECTION
+    ------------------------------- */
+
+    let kickSum = 0;
+
+
+    for (
+        let i = 1;
+        i <= 8;
+        i++
+    ) {
+
+        kickSum +=
+            heroFreqData[i];
+
+    }
+
+
+    const rawBass =
+        kickSum / 8;
+
+
+    bassMovingAverage =
+        bassMovingAverage * 0.94 +
+        rawBass * 0.06;
+
+
+    let bassSpike =
+        rawBass -
+        bassMovingAverage;
+
+
+    bassSpike =
+        Math.max(
+            bassSpike,
+            0
+        );
+
+
+    let bassFactor =
+        bassSpike / 28;
+
+
+    bassFactor =
+        Math.min(
+            bassFactor,
+            1
+        );
+
+
+    const shaped =
+        Math.pow(
+            bassFactor,
+            1.8
+        );
+
+
+    let targetBass =
+        Math.min(
+            shaped * 2.2,
+            1
+        );
+
+
+    if (bassSpike < 3) {
+
+        targetBass = 0;
+
+    }
+
+
+    /* -------------------------------
+       SMOOTH BASS
+    ------------------------------- */
+
+    if (
+        targetBass >
+        currentBass
+    ) {
+
+        currentBass +=
+            (
+                targetBass -
+                currentBass
+            ) * 0.45;
+
+    } else {
+
+        currentBass +=
+            (
+                targetBass -
+                currentBass
+            ) * 0.12;
+
+    }
+
+
+    /* -------------------------------
+       ORGANIC MORPHING
+    ------------------------------- */
+
+    const t =
+        performance.now() / 180;
+
+
+    const baseRadius = 50;
+
+
+    const waveAmp =
+        5 +
+        currentBass * 34;
+
+
+    const c1 =
+        baseRadius +
+        Math.sin(t) *
+        waveAmp;
+
+    const c2 =
+        baseRadius +
+        Math.cos(t * 1.3) *
+        waveAmp;
+
+    const c3 =
+        baseRadius +
+        Math.sin(t * 0.7) *
+        waveAmp;
+
+    const c4 =
+        baseRadius +
+        Math.cos(t * 1.6) *
+        waveAmp;
+
+
+    const c5 =
+        baseRadius +
+        Math.cos(t * 1.2) *
+        waveAmp;
+
+    const c6 =
+        baseRadius +
+        Math.sin(t * 1.4) *
+        waveAmp;
+
+    const c7 =
+        baseRadius +
+        Math.cos(t * 0.8) *
+        waveAmp;
+
+    const c8 =
+        baseRadius +
+        Math.sin(t * 1.7) *
+        waveAmp;
+
+
+    const liquidRadius =
+        `${c1}% ${c2}% ${c3}% ${c4}% / ` +
+        `${c5}% ${c6}% ${c7}% ${c8}%`;
+
+
+    /* -------------------------------
+       SCALE + GLOW
+    ------------------------------- */
+
+    const globScale =
+        1.06 +
+        currentBass * 0.34;
+
+
+    const globAlpha =
+        0.75 +
+        currentBass * 0.25;
+
+
+    const root =
+        document.documentElement;
+
+
+    root.style.setProperty(
+        "--liquid-radius",
+        liquidRadius
+    );
+
+
+    root.style.setProperty(
+        "--glob-scale",
+        globScale
+    );
+
+
+    root.style.setProperty(
+        "--glob-alpha",
+        globAlpha
+    );
+
+
+    root.style.setProperty(
+        "--dynamic-glow-color",
+        `${dynamicCoverColor} 1)`
+    );
+
+
+    /* -------------------------------
+       NEXT FRAME
+    ------------------------------- */
+
+    heroVisualizerFrame =
+        requestAnimationFrame(
+            renderHeroLiquid
+        );
+
+}
+
+        /* =========================================
+           INITIAL TRACK
+        ========================================= */
+
+        loadHeroTrack(0);
+
+    </script>
+
+</body>
+</html>
