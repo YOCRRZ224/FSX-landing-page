@@ -899,9 +899,9 @@
                 transform .7s cubic-bezier(.2,.8,.2,1);
         }
 
-        /* =========================================
-           HERO PLAYER
-        ========================================= */
+                                                    
+                      
+                                                    
 
         .hero-player {
             position: relative;
@@ -918,9 +918,9 @@
                 transform .35s ease,
                 box-shadow .35s ease;
         }
-/* ==========================================
-   FSX — LIQUID ALBUM ART
-========================================== */
+                                             
+                         
+                                             
 
 .hero-player-art {
     width: 100%;
@@ -933,18 +933,18 @@
     background: transparent;
 }
 
-/* ==========================================
-   MAIN LIQUID BLOB
-========================================== */
+                                             
+                   
+                                             
 
 .hero-player-art::before {
     content: "";
     position: absolute;
 
-    /*
-     * Bigger than the album itself so the
-     * liquid can visibly surround it.
-     */
+      
+                                          
+                                      
+       
     width: 104%;
     height: 104%;
 
@@ -963,10 +963,10 @@
             rgba(var(--ambient-rgb, 238, 157, 158), .58) 100%
         );
 
-    /*
-     * MUCH less blur.
-     * This keeps the blob shape visible.
-     */
+      
+                      
+                                         
+       
     filter: blur(7px);
 
     opacity: var(--glob-alpha, .72);
@@ -986,9 +986,9 @@
 }
 
 
-/* ==========================================
-   SOFT OUTER GLOW
-========================================== */
+                                             
+                  
+                                             
 
 .hero-player-art::after {
     content: "";
@@ -1008,9 +1008,9 @@
             transparent 68%
         );
 
-    /*
-     * Only the outer glow is heavily blurred.
-     */
+      
+                                              
+       
     filter: blur(16px);
 
     opacity: .65;
@@ -1022,9 +1022,9 @@
 }
 
 
-/* ==========================================
-   ACTUAL ALBUM ART
-========================================== */
+                                             
+                   
+                                             
 
 .hero-player-art img {
     position: relative;
@@ -1039,9 +1039,9 @@
 
     border-radius: 16px;
 
-    /*
-     * Keeps the actual artwork completely sharp.
-     */
+      
+                                                 
+       
     filter: none;
     opacity: 1;
 
@@ -1054,9 +1054,9 @@
 }
 
 
-/* ==========================================
-   PLAYING STATE
-========================================== */
+                                             
+                
+                                             
 
 .hero-player.is-playing .hero-player-art img {
     box-shadow:
@@ -1065,9 +1065,9 @@
 }
 
 
-/* ==========================================
-   ORGANIC IDLE MOTION
-========================================== */
+                                             
+                      
+                                             
 
 @keyframes liquidIdle {
 
@@ -1126,9 +1126,9 @@
             text-overflow: ellipsis;
         }
 
-        /* =========================================
-           VISUALIZER
-        ========================================= */
+                                                    
+                     
+                                                    
 
         .hero-visualizer {
             display: flex;
@@ -1244,9 +1244,9 @@
             min-width: 0;
         }
 
-        /* =========================================
-           RESPONSIVE
-        ========================================= */
+                                                    
+                     
+                                                    
 
         @media (max-width: 900px) {
             .hero {
@@ -1649,7 +1649,7 @@ padding-bottom: 26px;
 
     <main id="top">
 
-        <!-- HERO -->
+                     
         <section class="hero wrap">
 
             <div class="hero-copy-wrap" data-reveal>
@@ -1691,7 +1691,7 @@ padding-bottom: 26px;
 
             </div>
 
-            <!-- HERO PLAYER -->
+                                
             <div class="hero-player" id="heroPlayer">
 
                 <div class="hero-player-art">
@@ -1774,7 +1774,7 @@ padding-bottom: 26px;
 
         </section>
 
-        <!-- TICKER -->
+                       
         <div class="ticker">
             <div class="ticker-track">
 
@@ -1791,7 +1791,7 @@ padding-bottom: 26px;
             </div>
         </div>
 
-        <!-- FEATURES -->
+                         
         <section class="wrap" id="features">
 
             <div class="section-head" data-reveal>
@@ -1865,7 +1865,7 @@ padding-bottom: 26px;
 
         </section>
 
-        <!-- DETAILS -->
+                        
         <section class="feature-lab" id="details">
 
             <div class="wrap detail-grid">
@@ -2011,7 +2011,7 @@ padding-bottom: 26px;
 
         </section>
 
-        <!-- SHOWCASE -->
+                         
         <section class="showcase" id="showcase">
 
             <div class="wrap">
@@ -2088,7 +2088,7 @@ padding-bottom: 26px;
 
         </section>
 
-        <!-- DOWNLOAD -->
+                         
         <section class="wrap download" id="download">
 
             <div data-reveal>
@@ -2145,7 +2145,7 @@ padding-bottom: 26px;
 
     </main>
 
-    <!-- FOOTER -->
+                   
 <footer class="wrap">
 
 <div class="footer-main">
@@ -2153,10 +2153,6 @@ padding-bottom: 26px;
 
     <span>
         made for music, by people who listen to it a lot.
-    </span>
-
-    <span>
-        © 2024 FSX
     </span>
 </div>
 
@@ -2201,9 +2197,9 @@ padding-bottom: 26px;
 
     <script>
 
-        /* =========================================
-           DOWNLOAD TOAST
-        ========================================= */
+                                                    
+                         
+                                                    
 
         const toast = document.querySelector("#toast");
 
@@ -2224,9 +2220,9 @@ padding-bottom: 26px;
             });
 
 
-        /* =========================================
-           SCROLL REVEAL
-        ========================================= */
+                                                    
+                        
+                                                    
 
         const reveal = new IntersectionObserver(
             (entries) => {
@@ -2255,9 +2251,9 @@ padding-bottom: 26px;
             .forEach((item) => reveal.observe(item));
 
 
-        /* =========================================
-           ANIME.JS
-        ========================================= */
+                                                    
+                   
+                                                    
 
         if (window.anime) {
 
@@ -2307,17 +2303,17 @@ padding-bottom: 26px;
         let heroIndex = 0;
 
 
-        /*
-         * Create one persistent Audio object.
-         */
+          
+                                              
+           
         const heroAudio = new Audio();
 
         heroAudio.preload = "metadata";
 
 
-        /* =========================================
-           LOAD TRACK
-        ========================================= */
+                                                    
+                     
+                                                    
 
         function loadHeroTrack(index, autoplay = false) {
 
@@ -2335,25 +2331,25 @@ padding-bottom: 26px;
             );
 
 
-            /*
-             * Stop current audio.
-             */
+              
+                                  
+               
             heroAudio.pause();
 
             heroAudio.currentTime = 0;
 
 
-            /*
-             * Set new source.
-             */
+              
+                              
+               
             heroAudio.src = track.src;
 
             heroAudio.load();
 
 
-            /*
-             * Update UI.
-             */
+              
+                         
+               
             document
                 .getElementById("heroTitle")
                 .textContent = track.title;
@@ -2405,10 +2401,10 @@ heroCover.src = track.cover;
             updateHeroPlayButton();
 
 
-            /*
-             * Autoplay only when explicitly requested
-             * by a user interaction such as Next.
-             */
+              
+                                                      
+                                                  
+               
             if (autoplay) {
                 playHeroAudio();
             }
@@ -2416,9 +2412,9 @@ heroCover.src = track.cover;
         }
 
 
-        /* =========================================
-           PLAY AUDIO
-        ========================================= */
+                                                    
+                     
+                                                    
 
         async function playHeroAudio() {
 
@@ -2452,9 +2448,9 @@ heroCover.src = track.cover;
         }
 
 
-        /* =========================================
-           ERROR TOAST
-        ========================================= */
+                                                    
+                      
+                                                    
 
         function showHeroError(message) {
 
@@ -2484,9 +2480,9 @@ heroCover.src = track.cover;
         }
 
 
-        /* =========================================
-           PLAY / PAUSE
-        ========================================= */
+                                                    
+                       
+                                                    
 
         function heroToggle() {
 
@@ -2503,9 +2499,9 @@ heroCover.src = track.cover;
         }
 
 
-        /* =========================================
-           PLAY BUTTON
-        ========================================= */
+                                                    
+                      
+                                                    
 
         function updateHeroPlayButton() {
 
@@ -2531,9 +2527,9 @@ heroCover.src = track.cover;
         }
 
 
-        /* =========================================
-           NEXT TRACK
-        ========================================= */
+                                                    
+                     
+                                                    
 
         function heroNext() {
 
@@ -2545,9 +2541,9 @@ heroCover.src = track.cover;
         }
 
 
-        /* =========================================
-           PREVIOUS TRACK
-        ========================================= */
+                                                    
+                         
+                                                    
 
         function heroPrev() {
 
@@ -2567,9 +2563,9 @@ heroCover.src = track.cover;
         }
 
 
-        /* =========================================
-           AUDIO EVENTS
-        ========================================= */
+                                                    
+                       
+                                                    
 
         heroAudio.addEventListener(
             "loadstart",
@@ -2672,9 +2668,9 @@ heroCover.src = track.cover;
         );
 
 
-        /* =========================================
-           AUDIO ERROR
-        ========================================= */
+                                                    
+                      
+                                                    
 
         heroAudio.addEventListener(
             "error",
@@ -2745,9 +2741,9 @@ heroCover.src = track.cover;
         );
 
 
-        /* =========================================
-           TIME / PROGRESS
-        ========================================= */
+                                                    
+                          
+                                                    
 
         heroAudio.addEventListener(
             "timeupdate",
@@ -2797,9 +2793,9 @@ heroCover.src = track.cover;
         );
 
 
-        /* =========================================
-           TIME FORMAT
-        ========================================= */
+                                                    
+                      
+                                                    
 
         function formatHeroTime(seconds) {
 
@@ -2827,9 +2823,9 @@ heroCover.src = track.cover;
         }
 
 
-        /* =========================================
-           CLICK PROGRESS BAR
-        ========================================= */
+                                                    
+                             
+                                                    
 
         document
             .getElementById("heroProgressTrack")
@@ -2880,9 +2876,9 @@ heroCover.src = track.cover;
 
 
         
-        /* =========================================
-   LIQUID AUDIO VISUALIZER
-========================================= */
+                                                    
+                          
+                                            
 
 let heroAudioCtx = null;
 let heroAnalyser = null;
@@ -2899,9 +2895,9 @@ let dynamicCoverColor =
     "rgba(238, 157, 158, ";
 
 
-/* =========================================
-   INITIALIZE WEB AUDIO
-========================================= */
+                                            
+                       
+                                            
 
 function initHeroAudioVisualizer() {
 
@@ -2957,9 +2953,9 @@ function initHeroAudioVisualizer() {
 }
 
 
-/* =========================================
-   AUDIO PLAY
-========================================= */
+                                            
+             
+                                            
 
 heroAudio.addEventListener(
     "play",
@@ -2997,9 +2993,9 @@ heroAudio.addEventListener(
 );
 
 
-/* =========================================
-   AUDIO PAUSE
-========================================= */
+                                            
+              
+                                            
 
 heroAudio.addEventListener(
     "pause",
@@ -3019,9 +3015,9 @@ heroAudio.addEventListener(
 );
 
 
-/* =========================================
-   EXTRACT COVER COLOR
-========================================= */
+                                            
+                      
+                                            
 
 function extractDominantColor(imgElement) {
 
@@ -3258,9 +3254,9 @@ function extractDominantColor(imgElement) {
 }
 
 
-/* =========================================
-   RENDER LIQUID
-========================================= */
+                                            
+                
+                                            
 
 function renderHeroLiquid() {
 
@@ -3281,9 +3277,9 @@ function renderHeroLiquid() {
     );
 
 
-    /* -------------------------------
-       BASS DETECTION
-    ------------------------------- */
+                                      
+                     
+                                      
 
     let kickSum = 0;
 
@@ -3353,9 +3349,9 @@ function renderHeroLiquid() {
     }
 
 
-    /* -------------------------------
-       SMOOTH BASS
-    ------------------------------- */
+                                      
+                  
+                                      
 
     if (
         targetBass >
@@ -3379,9 +3375,9 @@ function renderHeroLiquid() {
     }
 
 
-    /* -------------------------------
-       ORGANIC MORPHING
-    ------------------------------- */
+                                      
+                       
+                                      
 
     const t =
         performance.now() / 180;
@@ -3442,9 +3438,9 @@ function renderHeroLiquid() {
         `${c5}% ${c6}% ${c7}% ${c8}%`;
 
 
-    /* -------------------------------
-       SCALE + GLOW
-    ------------------------------- */
+                                      
+                   
+                                      
 
     const globScale =
         1.06 +
@@ -3484,9 +3480,9 @@ function renderHeroLiquid() {
     );
 
 
-    /* -------------------------------
-       NEXT FRAME
-    ------------------------------- */
+                                      
+                 
+                                      
 
     heroVisualizerFrame =
         requestAnimationFrame(
@@ -3495,9 +3491,9 @@ function renderHeroLiquid() {
 
 }
 
-        /* =========================================
-           INITIAL TRACK
-        ========================================= */
+                                                    
+                        
+                                                    
 
         loadHeroTrack(0);
 
